@@ -1,0 +1,59 @@
+package com.kotlin.spring.sr_kotlin_catalog_service.service
+
+import com.kotlin.spring.sr_kotlin_catalog_service.dto.CourseDto
+import com.kotlin.spring.sr_kotlin_catalog_service.entity.Course
+import com.kotlin.spring.sr_kotlin_catalog_service.exception.CourseNotFoundException
+import com.kotlin.spring.sr_kotlin_catalog_service.repository.CourseRepository
+import mu.KLogging
+import org.springframework.stereotype.Service
+
+@Service
+class CourseService(private val courseRepository: CourseRepository) {
+
+    companion object : KLogging()
+
+    /** Add a course */
+    fun addCourse(courseDTO: CourseDto): CourseDto {
+        val courseEntity = courseDTO.let {
+            Course(it.id, it.name, it.category)
+        }
+        logger.info("Created new course with id $courseEntity")
+        courseRepository.save(courseEntity)
+
+        return courseEntity.let { CourseDto(it.id, courseDTO.name, courseDTO.category) }
+    }
+
+    /** Get all course */
+    fun getCourses(): List<CourseDto> {
+        val courses = courseRepository.findAll()
+        logger.info("Getting all courses $courses")
+        return courses.map { CourseDto(it.id, it.name, it.category) }
+    }
+
+    /** Update a course */
+    fun updateCourse(id: Int, course: CourseDto): CourseDto {
+        val existingCourse = courseRepository.findById(id)
+
+        return if (existingCourse.isPresent) {
+            existingCourse.get().let {
+                val updatedCourse = it.copy(name = course.name, category = course.category)
+                courseRepository.save(updatedCourse)
+                CourseDto(updatedCourse.id, updatedCourse.name, updatedCourse.category)
+            }
+        } else {
+            throw CourseNotFoundException("Course with id $id not found")
+        }
+    }
+
+    /** Delete a course by id */
+    fun deleteCourse(courseId: Int) {
+        val existingCourse = courseRepository.findById(courseId)
+        if (existingCourse.isPresent){
+            existingCourse.get().let {
+                courseRepository.delete(it)
+            }
+        } else {
+            throw CourseNotFoundException("Course deletion by id $courseId not found")
+        }
+    }
+}
