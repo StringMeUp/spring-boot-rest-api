@@ -1,5 +1,6 @@
 package com.kotlin.spring.sr_kotlin_catalog_service.util
 
+import com.kotlin.spring.sr_kotlin_catalog_service.dto.CourseDto
 import com.kotlin.spring.sr_kotlin_catalog_service.entity.Course
 
 fun courseEntityList(): List<Course> {
@@ -8,3 +9,8 @@ fun courseEntityList(): List<Course> {
         Course(2, "Test 666", "Administration")
     )
 }
+
+fun courseDTO(
+    id: Int? = null,
+    name: String = "Test Course", category: String = "IT"
+) = CourseDto(id, name, category)
