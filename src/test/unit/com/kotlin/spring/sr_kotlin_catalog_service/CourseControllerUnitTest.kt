@@ -2,6 +2,7 @@ package com.kotlin.spring.sr_kotlin_catalog_service
 
 import com.kotlin.spring.sr_kotlin_catalog_service.contrlollers.CourseController
 import com.kotlin.spring.sr_kotlin_catalog_service.dto.CourseDto
+import com.kotlin.spring.sr_kotlin_catalog_service.entity.Course
 import com.kotlin.spring.sr_kotlin_catalog_service.service.CourseService
 import com.kotlin.spring.sr_kotlin_catalog_service.util.courseDTO
 import com.kotlin.spring.sr_kotlin_catalog_service.util.courseEntityList
@@ -68,5 +69,26 @@ class CourseControllerUnitTest {
         Assertions.assertIterableEquals(
             courses,
             courseEntityList().map { CourseDto(id = it.id, name = it.name, category = it.category) })
+    }
+
+
+    @Test
+    fun updateCourse() {
+        val course = Course(id = 100, name = "Course", category = "IT")
+        val updateDto = CourseDto(id = 100, name = "Updated Course", category = "Update IT")
+
+        every { courseServiceMock.updateCourse(any(), any()) }.returns(updateDto)
+
+        val updatedCourse = webTestClient.put()
+            .uri("/v1/courses/{id}", course.id)
+            .bodyValue(updateDto)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(CourseDto::class.java)
+            .returnResult()
+            .responseBody
+
+        assertEquals(updatedCourse?.name, updateDto.name)
+        assertEquals(updatedCourse?.category, updateDto.category)
     }
 }
