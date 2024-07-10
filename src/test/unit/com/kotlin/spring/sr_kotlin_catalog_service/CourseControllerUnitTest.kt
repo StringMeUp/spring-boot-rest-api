@@ -4,9 +4,11 @@ import com.kotlin.spring.sr_kotlin_catalog_service.contrlollers.CourseController
 import com.kotlin.spring.sr_kotlin_catalog_service.dto.CourseDto
 import com.kotlin.spring.sr_kotlin_catalog_service.service.CourseService
 import com.kotlin.spring.sr_kotlin_catalog_service.util.courseDTO
+import com.kotlin.spring.sr_kotlin_catalog_service.util.courseEntityList
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
 import org.hibernate.validator.internal.util.Contracts.assertNotNull
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,11 +29,11 @@ class CourseControllerUnitTest {
     @Test
     fun addCourse() {
 
-        every { courseServiceMock.addCourse(any()) } returns  courseDTO().copy(id = 2)
+        every { courseServiceMock.addCourse(any()) } returns courseDTO().copy(id = 1)
 
         val savedCourseDto = webTestClient.post()
             .uri("/v1/courses")
-            .bodyValue( courseDTO())
+            .bodyValue(courseDTO())
             .exchange()
             .expectStatus().isCreated
             .expectBody(CourseDto::class.java)
@@ -43,4 +45,28 @@ class CourseControllerUnitTest {
         assertEquals("IT", savedCourseDto.category)
     }
 
+    @Test
+    fun getCourses() {
+
+        every { courseServiceMock.getCourses() }.returnsMany(courseEntityList().map {
+            CourseDto(
+                it.id,
+                it.name,
+                it.category
+            )
+        })
+
+        val courses = webTestClient.get()
+            .uri("/v1/courses")
+            .exchange()
+            .expectStatus().is2xxSuccessful
+            .expectBodyList(CourseDto::class.java)
+            .returnResult()
+            .responseBody
+
+        assertNotNull(courses)
+        Assertions.assertIterableEquals(
+            courses,
+            courseEntityList().map { CourseDto(id = it.id, name = it.name, category = it.category) })
+    }
 }
