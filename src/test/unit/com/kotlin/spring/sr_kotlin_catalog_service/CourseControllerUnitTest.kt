@@ -13,6 +13,7 @@ import io.mockk.runs
 import org.hibernate.validator.internal.util.Contracts.assertNotNull
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
@@ -52,11 +53,16 @@ class CourseControllerUnitTest {
     fun addCourseValidation() {
         val courseDto = courseDTO(name = "", category = "")
 
-        webTestClient.post()
+        val result = webTestClient.post()
             .uri("/v1/courses")
             .bodyValue(courseDto)
             .exchange()
             .expectStatus().isBadRequest
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
+
+        assertEquals("courseDto.category must not be blank, courseDto.name must not be blank", result)
     }
 
     @Test
