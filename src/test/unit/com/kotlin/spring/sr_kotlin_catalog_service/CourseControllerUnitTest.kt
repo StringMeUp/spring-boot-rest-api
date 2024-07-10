@@ -8,6 +8,8 @@ import com.kotlin.spring.sr_kotlin_catalog_service.util.courseDTO
 import com.kotlin.spring.sr_kotlin_catalog_service.util.courseEntityList
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.just
+import io.mockk.runs
 import org.hibernate.validator.internal.util.Contracts.assertNotNull
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -90,5 +92,16 @@ class CourseControllerUnitTest {
 
         assertEquals(updatedCourse?.name, updateDto.name)
         assertEquals(updatedCourse?.category, updateDto.category)
+    }
+
+    @Test
+    fun deleteCourse() {
+        val courseId = courseEntityList().map { CourseDto(it.id, it.name, it.category) }.first().id ?: 1
+
+        every { courseServiceMock.deleteCourse(any()) } just runs
+        webTestClient.delete()
+            .uri("/v1/courses/{courseId}", courseId)
+            .exchange()
+            .expectStatus().isNoContent
     }
 }

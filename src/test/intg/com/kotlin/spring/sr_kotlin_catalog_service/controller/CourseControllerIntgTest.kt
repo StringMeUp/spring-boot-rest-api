@@ -3,6 +3,7 @@ package com.kotlin.spring.sr_kotlin_catalog_service.controller
 import com.kotlin.spring.sr_kotlin_catalog_service.dto.CourseDto
 import com.kotlin.spring.sr_kotlin_catalog_service.entity.Course
 import com.kotlin.spring.sr_kotlin_catalog_service.repository.CourseRepository
+import com.kotlin.spring.sr_kotlin_catalog_service.util.courseDTO
 import com.kotlin.spring.sr_kotlin_catalog_service.util.courseEntityList
 import org.hibernate.validator.internal.util.Contracts.assertNotNull
 import org.junit.jupiter.api.Assertions
@@ -85,5 +86,15 @@ class CourseControllerIntgTest {
 
         assertEquals(updatedCourse?.name, updateDto.name)
         assertEquals(updatedCourse?.category, updateDto.category)
+    }
+
+    @Test
+    fun deleteCourse() {
+        val courseId = courseEntityList().map { CourseDto(it.id, it.name, it.category) }.first().id ?: 1
+
+        webTestClient.delete()
+            .uri("/v1/courses/{courseId}", courseId)
+            .exchange()
+            .expectStatus().isNoContent
     }
 }
