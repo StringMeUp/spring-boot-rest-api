@@ -49,6 +49,17 @@ class CourseControllerUnitTest {
     }
 
     @Test
+    fun addCourseValidation() {
+        val courseDto = courseDTO(name = "", category = "")
+
+        webTestClient.post()
+            .uri("/v1/courses")
+            .bodyValue(courseDto)
+            .exchange()
+            .expectStatus().isBadRequest
+    }
+
+    @Test
     fun getCourses() {
 
         every { courseServiceMock.getCourses() }.returnsMany(courseEntityList().map {
