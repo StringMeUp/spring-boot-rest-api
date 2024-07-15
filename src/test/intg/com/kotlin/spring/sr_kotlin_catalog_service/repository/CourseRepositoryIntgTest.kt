@@ -30,7 +30,7 @@ class CourseRepositoryIntgTest {
 
     @Test
     fun findByName_test() {
-        val result = repository.findByName("Bingo")
-        assertEquals(1, result.size)
+        val result = repository.findByName("Tes")
+        assertEquals(3, result.size)
     }
 }
