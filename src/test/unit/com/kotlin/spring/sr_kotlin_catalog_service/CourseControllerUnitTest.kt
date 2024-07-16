@@ -13,7 +13,6 @@ import io.mockk.runs
 import org.hibernate.validator.internal.util.Contracts.assertNotNull
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertIterableEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
@@ -68,7 +67,7 @@ class CourseControllerUnitTest {
     @Test
     fun getCourses() {
 
-        every { courseServiceMock.getCourses() }.returnsMany(courseEntityList().map {
+        every { courseServiceMock.getCourses(any()) }.returnsMany(courseEntityList().map {
             CourseDto(
                 it.id,
                 it.name,

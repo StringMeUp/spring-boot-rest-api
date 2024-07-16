@@ -20,8 +20,8 @@ class CourseController(private val courseService: CourseService) {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun getCourses(): List<CourseDto> {
-        return courseService.getCourses()
+    fun getCoursesByName(@RequestParam("course_name", required = false) courseName: String?): List<CourseDto> {
+        return courseService.getCourses(courseName)
     }
 
     @PutMapping("/{id}")

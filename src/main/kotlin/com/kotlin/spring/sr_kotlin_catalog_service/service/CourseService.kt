@@ -20,12 +20,15 @@ class CourseService(private val courseRepository: CourseRepository) {
         logger.info("Created new course with id $courseEntity")
         courseRepository.save(courseEntity)
 
-        return courseEntity.let { CourseDto(it.id, courseDTO.name, courseDTO.category) }
+        return CourseDto(courseEntity.id, courseDTO.name, courseDTO.category)
     }
 
     /** Get all course */
-    fun getCourses(): List<CourseDto> {
-        val courses = courseRepository.findAll()
+    fun getCourses(courseName: String?): List<CourseDto> {
+        val courses = courseName?.let {
+            courseRepository.findByNameContaining(it)
+        } ?: courseRepository.findAll()
+
         logger.info("Getting all courses $courses")
         return courses.map { CourseDto(it.id, it.name, it.category) }
     }
@@ -48,7 +51,7 @@ class CourseService(private val courseRepository: CourseRepository) {
     /** Delete a course by id */
     fun deleteCourse(courseId: Int) {
         val existingCourse = courseRepository.findById(courseId)
-        if (existingCourse.isPresent){
+        if (existingCourse.isPresent) {
             existingCourse.get().let {
                 courseRepository.delete(it)
             }
