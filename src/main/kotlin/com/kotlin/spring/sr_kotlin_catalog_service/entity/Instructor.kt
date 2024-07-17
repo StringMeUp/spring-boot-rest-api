@@ -5,15 +5,15 @@ import jakarta.persistence.*
 @Entity
 @Table(name = "INSTRUCTORS")
 data class Instructor(
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    val Id: Int?,
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Int?,
     val name: String,
-    @OneToOne(
+    @OneToMany(
         targetEntity = Course::class,
         mappedBy = "instructor",
         cascade = [CascadeType.ALL],
         orphanRemoval = true
     )
-    val courses: List<Course> = mutableListOf()
+    var courses: List<Course> = mutableListOf()
 )
