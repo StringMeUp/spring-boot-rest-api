@@ -49,7 +49,7 @@ class CourseControllerUnitTest {
     }
 
     @Test
-    fun addCourseValidation() {
+    fun addCourse_Validation() {
         val courseDto = courseDTO(name = "", category = "")
 
         val result = webTestClient.post()

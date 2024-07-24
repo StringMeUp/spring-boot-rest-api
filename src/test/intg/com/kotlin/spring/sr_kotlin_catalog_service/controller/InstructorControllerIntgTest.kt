@@ -32,6 +32,20 @@ class InstructorControllerIntgTest {
     }
 
     @Test
+    fun addInstructor_Validation() {
+        val instructor = InstructorDto(id = null, name = "")
+        val result = webTestClient.post()
+            .uri("/v1/instructors")
+            .bodyValue(instructor)
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBody(String::class.java)
+            .returnResult().responseBody
+
+        Assertions.assertEquals("instructorDto.name must not be blank", result)
+    }
+
+    @Test
     fun addInstructor() {
         val instructor = InstructorDto(id = null, name = "T-Instructor")
         val instructorDto = webTestClient.post()

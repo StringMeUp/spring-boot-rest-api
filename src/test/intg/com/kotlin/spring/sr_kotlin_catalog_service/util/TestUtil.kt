@@ -1,6 +1,7 @@
 package com.kotlin.spring.sr_kotlin_catalog_service.util
 
 import com.kotlin.spring.sr_kotlin_catalog_service.dto.CourseDto
+import com.kotlin.spring.sr_kotlin_catalog_service.dto.InstructorDto
 import com.kotlin.spring.sr_kotlin_catalog_service.entity.Course
 import com.kotlin.spring.sr_kotlin_catalog_service.entity.Instructor
 
@@ -15,7 +16,7 @@ fun courseEntityList(): List<Course> {
 
 fun instructorEntityList(): List<Instructor> {
     return listOf(
-        Instructor(1, "Ins Test 1",),
+        Instructor(1, "Ins Test 1"),
         Instructor(2, "Ins Test 666"),
         Instructor(3, "Ins Test 68"),
         Instructor(4, "Ins Test 9"),
@@ -24,5 +25,11 @@ fun instructorEntityList(): List<Instructor> {
 
 fun courseDTO(
     id: Int? = null,
-    name: String = "Test Course", category: String = "IT"
+    name: String = "Test Course",
+    category: String = "IT"
 ) = CourseDto(id, name, category)
+
+fun instructorDTO() = InstructorDto(
+    id = null,
+    name = "T-Instructor"
+)

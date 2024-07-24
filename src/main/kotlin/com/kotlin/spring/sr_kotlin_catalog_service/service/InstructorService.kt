@@ -7,7 +7,7 @@ import mu.KLogging
 import org.springframework.stereotype.Service
 
 @Service
-class InstructorService(val instructorRepository: InstructorRepository) {
+class InstructorService(private val instructorRepository: InstructorRepository) {
 
     companion object : KLogging()
 
