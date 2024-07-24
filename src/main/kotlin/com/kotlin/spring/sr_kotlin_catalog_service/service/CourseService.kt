@@ -22,7 +22,7 @@ class CourseService(private val courseRepository: CourseRepository) {
         logger.info("Created new course with id $courseEntity")
         courseRepository.save(courseEntity)
 
-        return CourseDto(courseEntity.id, courseDTO.name, courseDTO.category, courseDTO.instructorId)
+        return CourseDto(courseEntity.id, courseDTO.name, courseDTO.category)
     }
 
     /** Get all course */
@@ -32,7 +32,7 @@ class CourseService(private val courseRepository: CourseRepository) {
         } ?: courseRepository.findAll()
 
         //TODO Check string representation -> logger.info("Getting all courses $courses")
-        return courses.map { CourseDto(it.id, it.name, it.category, 1) }
+        return courses.map { CourseDto(it.id, it.name, it.category) }
     }
 
     /** Update a course */
@@ -43,7 +43,7 @@ class CourseService(private val courseRepository: CourseRepository) {
             existingCourse.get().let {
                 val updatedCourse = it.copy(name = course.name, category = course.category)
                 courseRepository.save(updatedCourse)
-                CourseDto(updatedCourse.id, updatedCourse.name, updatedCourse.category, updatedCourse.instructor?.id!!)
+                CourseDto(updatedCourse.id, updatedCourse.name, updatedCourse.category)
             }
         } else {
             throw CourseNotFoundException("Course with id $id not found")

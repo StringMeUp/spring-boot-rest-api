@@ -1,7 +1,6 @@
 package com.kotlin.spring.sr_kotlin_catalog_service.service
 
 import com.kotlin.spring.sr_kotlin_catalog_service.dto.InstructorDto
-import com.kotlin.spring.sr_kotlin_catalog_service.entity.Course
 import com.kotlin.spring.sr_kotlin_catalog_service.entity.Instructor
 import com.kotlin.spring.sr_kotlin_catalog_service.repository.InstructorRepository
 import mu.KLogging
