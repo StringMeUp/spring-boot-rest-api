@@ -27,9 +27,9 @@ fun courseDTO(
     id: Int? = null,
     name: String = "Test Course",
     category: String = "IT"
-) = CourseDto(id, name, category)
+) = CourseDto(id, name, category, 1)
 
 fun instructorDTO() = InstructorDto(
     id = null,
-    name = "T-Instructor"
+    name = "T-Instructor",
 )

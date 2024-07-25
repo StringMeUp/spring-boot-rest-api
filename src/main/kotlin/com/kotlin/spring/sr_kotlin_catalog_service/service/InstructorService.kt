@@ -5,6 +5,7 @@ import com.kotlin.spring.sr_kotlin_catalog_service.entity.Instructor
 import com.kotlin.spring.sr_kotlin_catalog_service.repository.InstructorRepository
 import mu.KLogging
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class InstructorService(private val instructorRepository: InstructorRepository) {
@@ -23,5 +24,9 @@ class InstructorService(private val instructorRepository: InstructorRepository) 
 
     fun getAllInstructors(): List<InstructorDto> {
         return instructorRepository.findAll().map { InstructorDto(it.id, it.name) }
+    }
+
+    fun findByInstructorId(id: Int): Optional<InstructorDto> {
+        return instructorRepository.findById(id).map { InstructorDto(it.id, it.name) }
     }
 }

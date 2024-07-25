@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/v1/courses")
 @Validated
-class CourseController(private val courseService: CourseService) {
+class CourseController(
+    private val courseService: CourseService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
